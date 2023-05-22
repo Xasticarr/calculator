@@ -15,10 +15,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
     numbers.forEach((number) => number.addEventListener("click", function(e) {
         handleNumber(e.target.textContent)
+        currentScreen.textContent = currentValue;
+    }))
+
+    operators.forEach((op) => op.addEventListener("click", function(e) {
+        handleOperator(e.target.textContent)
+        previousScreen.textContent = previousValue + " " + operator;
+        currentScreen.textContent = currentValue;
     }))
 })
 
 function handleNumber(num){
-    console.log(num);
+    if (currentValue.length <= 9){
+    currentValue += num;
+    }
 
+
+}
+
+function handleOperator(op){
+    operator = op;
+    previousValue = currentValue;
+    currentValue = "";
 }
