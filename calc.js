@@ -1,6 +1,8 @@
 let operator = "";
 let previousValue = "";
 let currentValue = "";
+let currentValue2 = ""; //was operateValue
+let previousValue2 = ""; //was displayValue
 
 document.addEventListener("DOMContentLoaded", function() {
     let clear = document.querySelector(".clear");
@@ -20,6 +22,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     operators.forEach((op) => op.addEventListener("click", function(e) {
         handleOperator(e.target.textContent)
+        // previousScreen.textContent = previousValue2 + " " + operator; 
+        // currentScreen.textContent = currentValue;
         previousScreen.textContent = previousValue + " " + operator;
         currentScreen.textContent = currentValue;
     }))
@@ -28,15 +32,36 @@ document.addEventListener("DOMContentLoaded", function() {
         previousValue = "";
         currentValue = "";
         operator = "";
+        // previousValue2 = "";
+        // currentValue2 = "";
         previousScreen.textContent = previousValue;
         currentScreen.textContent = currentValue;
 
     })
+
+    equal.addEventListener("click" , function() {
+        if (currentValue != "" && previousValue != ""){
+            operate()
+            previousScreen.textContent = "";
+            if (previousValue.length <= 9){
+                currentScreen.textContent = previousValue;
+            } else {
+                currentScreen.textContent = previousValue.slice(0,9) + "...";
+            }
+            //Want equal to clear currentValue and move currentValue to previousValue
+        }
+        // previousValue = currentValue;
+        // currentValue = "";           
+    })
+
+    decimal.addEventListener("click", function() {
+        addDecimal();
+    })  
 })
 
 function handleNumber(num){
     if (currentValue.length <= 9){
-    currentValue += num;
+       currentValue += num;
     }
 
 
@@ -45,5 +70,54 @@ function handleNumber(num){
 function handleOperator(op){
     operator = op;
     previousValue = currentValue;
+    // currentValue2 = previousValue;
+    // if (currentValue === 0 || ""){
+    //     previousValue2 = "";
+    // } else {
+    //     previousValue2 = currentValue;
+    // }
     currentValue = "";
+    // currentValue = previousValue2;
+    console.log(previousValue + "This is previous OP");
+    console.log(currentValue + " This is current OP")
+    // console.log(previousValue2 + " This is previousValue2 OP")
+    // console.log(currentValue2 + " This is currentValue2 OP")
+}
+
+function operate() {
+    previousValue = Number(previousValue);
+    currentValue = Number(currentValue);
+    // if (previousValue2 != 0 || "") {
+    //     previousValue = previousValue2
+    // };           
+
+    if (operator === "+") {
+        previousValue += currentValue;
+    } else if (operator === "-") {
+        previousValue -= currentValue;
+    } else if (operator === "x") {
+        previousValue *= currentValue;
+    } else {
+        previousValue /= currentValue;
+    }
+
+    previousValue = roundNumber(previousValue);
+    previousValue = previousValue.toString();
+    currentValue = currentValue.toString();
+    currentValue = previousValue;
+    // previousValue = previousValue2; want current value to also become previousValue2 for operating, and to clear display after equal is pressed
+
+    console.log(currentValue + "  is Current");
+    console.log(previousValue + "  is Previous");
+
+}
+
+function roundNumber(num) {
+    return Math.round(num * 1000) / 1000;
+}
+
+function addDecimal(){
+    if(!currentValue.includes(".")){
+        currentValue += ".";
+    }
 }
