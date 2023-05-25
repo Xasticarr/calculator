@@ -118,9 +118,11 @@ function operate() {
         previousValue -= currentValue;
     } else if (operator === "x") {
         previousValue *= currentValue;
+    } else if (operator === "/" && currentValue == 0){
+        alert("You can't divide by 0, silly!")
     } else {
         previousValue /= currentValue;
-    }
+    };
 
     previousValue = roundNumber(previousValue);
     previousValue = previousValue.toString();
