@@ -15,15 +15,30 @@ document.addEventListener("DOMContentLoaded", function() {
     let previousScreen = document.querySelector(".previous");
     let currentScreen = document.querySelector(".current");
 
+    let lastOperator = "";
+
     numbers.forEach((number) => number.addEventListener("click", function(e) {
+        if (previousValue === currentValue && lastOperator === "=") {
+            console.log("This is starting a new operation")
+            currentValue = "";
+            previousValue = "";
+            lastOperator = "";
+            console.log(e.target.textContent);
+            currentScreen.textContent = currentValue;
+        }
         handleNumber(e.target.textContent)
         currentScreen.textContent = currentValue;
     }))
 
     operators.forEach((op) => op.addEventListener("click", function(e) {
-        handleOperator(e.target.textContent)
-        // previousScreen.textContent = previousValue2 + " " + operator; 
-        // currentScreen.textContent = currentValue;
+        // console.log(previousValue + " previousValue");
+        // console.log(currentValue + " currentValue");
+        // console.log("Hitting in operators");
+        lastOperator = e.target.textContent;
+        if (currentValue !== "" && previousValue !== "" && previousValue2 !== currentValue){
+            operate()
+        };
+        handleOperator(e.target.textContent);
         previousScreen.textContent = previousValue + " " + operator;
         currentScreen.textContent = currentValue;
     }))
@@ -32,14 +47,16 @@ document.addEventListener("DOMContentLoaded", function() {
         previousValue = "";
         currentValue = "";
         operator = "";
-        // previousValue2 = "";
-        // currentValue2 = "";
+        lastOperator = "";
+        previousValue2 = "";
+        currentValue2 = "";
         previousScreen.textContent = previousValue;
         currentScreen.textContent = currentValue;
 
     })
 
     equal.addEventListener("click" , function() {
+        lastOperator = "=";
         if (currentValue != "" && previousValue != ""){
             operate()
             previousScreen.textContent = "";
@@ -50,8 +67,12 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             //Want equal to clear currentValue and move currentValue to previousValue
         }
-        // previousValue = currentValue;
-        // currentValue = "";           
+        previousValue = currentValue;
+        previousValue2 = currentValue;
+        console.log(previousValue + "is previousValue EQUAL");
+        console.log(previousValue2 + "is previousValue2 EQUAL");
+        console.log(currentValue + "is currentValue EQUAL");
+
     })
 
     decimal.addEventListener("click", function() {
@@ -78,8 +99,8 @@ function handleOperator(op){
     // }
     currentValue = "";
     // currentValue = previousValue2;
-    console.log(previousValue + "This is previous OP");
-    console.log(currentValue + " This is current OP")
+    // console.log(previousValue + "This is previous OP");
+    // console.log(currentValue + " This is current OP")
     // console.log(previousValue2 + " This is previousValue2 OP")
     // console.log(currentValue2 + " This is currentValue2 OP")
 }
@@ -87,9 +108,9 @@ function handleOperator(op){
 function operate() {
     previousValue = Number(previousValue);
     currentValue = Number(currentValue);
-    // if (previousValue2 != 0 || "") {
-    //     previousValue = previousValue2
-    // };           
+    if (previousValue2 !== 0 || "") {
+        previousValue2 = previousValue
+    };           
 
     if (operator === "+") {
         previousValue += currentValue;
@@ -105,7 +126,8 @@ function operate() {
     previousValue = previousValue.toString();
     currentValue = currentValue.toString();
     currentValue = previousValue;
-    // previousValue = previousValue2; want current value to also become previousValue2 for operating, and to clear display after equal is pressed
+    // previousValue2 = 
+    // want current value to also become previousValue2 for operating, and to clear display after equal is pressed
 
     console.log(currentValue + "  is Current");
     console.log(previousValue + "  is Previous");
